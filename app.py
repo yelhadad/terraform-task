@@ -7,9 +7,12 @@ app = Flask(__name__)
 def get_github_version(user, repo):
     res = requests.get(f"https://api.github.com/repos/{user}/{repo}/releases/latest")
     data = res.json()
-    if data['message'] == "Not Found":
-        return make_response("{error: unable to find tag_name, repo or user may be incorrect}", 404)
-    return make_response("{latest_version: data['tag_name']}", 200)
+    try:
+        if data['message'] == "Not Found":
+            return make_response("{error: unable to find tag_name, repo or user may be incorrect}", 404)
+    except:
+        KeyError
+    return make_response("{latest_version: %s}" % data['tag_name'], 200)
 
 
-app.run('127.0.0.1', 8080, debug=True)
+app.run('0.0.0.0', 8080, debug=True)

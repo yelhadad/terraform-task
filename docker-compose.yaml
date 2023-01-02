@@ -1,0 +1,21 @@
+version: "3.7"
+networks:
+  terraform-task: {}
+services:
+  app:
+    image: yelhadad/terraform-task-app
+    hostname: app
+    networks:
+      - terraform-task
+  ubuntu:
+    image: ubuntu:latest
+    networks:
+      - terraform-task
+  nginx:
+    image: yelhadad/terraform-task-nginx
+    networks:
+      - terraform-task
+    ports:
+      - "8000:80"
+    depends_on:
+      - app
